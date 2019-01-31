@@ -2215,6 +2215,15 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 	 */
 	if (!subname) {
 		md->name_idx = find_first_zero_bit(name_use, max_devices);
+		/* make sure emmc at mmcblk0
+		 *           sd card at mmcblk1
+		 *           AI chip at mmcblk2
+		 */
+		if(card->type == MMC_TYPE_SD && md->name_idx == 0)
+			md->name_idx = 1;
+		if(card->cid.manfid == 0xea && card->cid.oemid == 0x60){
+			md->name_idx = 2;
+		}
 		__set_bit(md->name_idx, name_use);
 	} else
 		md->name_idx = ((struct mmc_blk_data *)

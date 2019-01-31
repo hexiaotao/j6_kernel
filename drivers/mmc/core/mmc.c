@@ -881,7 +881,9 @@ static void mmc_set_bus_speed(struct mmc_card *card)
 	     max_dtr > card->ext_csd.hs200_max_dtr)
 		max_dtr = card->ext_csd.hs200_max_dtr;
 	else if (mmc_card_hs(card) && max_dtr > card->ext_csd.hs_max_dtr)
-		max_dtr = card->ext_csd.hs_max_dtr;
+		/* set emmc bus clk at 50M for AI chip */
+		//max_dtr = card->ext_csd.hs_max_dtr;
+		max_dtr = card->csd.max_dtr;
 	else if (max_dtr > card->csd.max_dtr)
 		max_dtr = card->csd.max_dtr;
 

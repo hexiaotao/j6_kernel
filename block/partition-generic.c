@@ -437,6 +437,11 @@ rescan:
 		disk->fops->revalidate_disk(disk);
 	check_disk_size_change(disk, bdev);
 	bdev->bd_invalidated = 0;
+
+	/* don't scan partitions on AI chip */
+	if(!strcmp(disk->disk_name, "mmcblk2"))
+		return 0;
+
 	if (!get_capacity(disk) || !(state = check_partition(disk, bdev)))
 		return 0;
 	if (IS_ERR(state)) {
